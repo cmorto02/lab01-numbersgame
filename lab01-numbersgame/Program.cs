@@ -11,9 +11,11 @@ namespace lab01_numbersgame
                 Console.WriteLine("Welcome to my game! Lets do some math!");
                 StartSequence();
             }
-            catch (Exception)
+            catch (Exception e)
             {
+
                 Console.WriteLine("There was an error");
+                Console.WriteLine(e.Message);
             }
             finally
             {
@@ -27,17 +29,24 @@ namespace lab01_numbersgame
                 Console.WriteLine("Please enter a number greater than zero(as a digit, not a word): ");
                 string userNumber = Console.ReadLine();
                 int convertedUserNumber = Convert.ToInt32(userNumber);
-                Console.WriteLine(convertedUserNumber);
                 int[] inputArray = new int[convertedUserNumber];
                 int[] populated = Populate(inputArray);
                 int sum = GetSum(populated);
-                GetProduct(populated, sum);
-                //GetQuotient();
+                int product = GetProduct(populated, sum);
+                decimal quotient = GetQuotient(product);
+                Console.WriteLine($"Your array size is {convertedUserNumber}");
+                Console.WriteLine($"the numbers in your array are{string.Join(", ", populated)}.");
+                Console.WriteLine($"The sum of the array is {sum}.");
+                int mult = product / sum;
+                Console.WriteLine($"{mult} * {sum} = {product}");
+                decimal dividend = product / quotient;
+                Console.WriteLine($"{product} / {dividend} = {quotient}");
+
 
             }
             catch (FormatException)
             {
-                Console.WriteLine("Please enter your number as a number not a word");
+                Console.WriteLine("Please enter your number as a number not a word.");
             }
             catch (OverflowException e)
             {
@@ -63,7 +72,7 @@ namespace lab01_numbersgame
             {
                 sum += createdArray[i];
             }
-            if (sum < 20)
+            if (sum <= 20)
             {
                 throw (new Exception($"Value of {sum} is too low."));
             }
@@ -75,7 +84,7 @@ namespace lab01_numbersgame
             
             try
             {
-                Console.WriteLine($"Please choose a number between 1 and {createdArray.Length+1}");
+                Console.WriteLine($"Please choose a number between 1 and {createdArray.Length}:");
                 string pickedIndex = Console.ReadLine();
                 int parsedPickedIndex = Convert.ToInt32(pickedIndex) - 1;
                 int product = sum * createdArray[parsedPickedIndex];
@@ -84,6 +93,24 @@ namespace lab01_numbersgame
             catch (IndexOutOfRangeException m)
             {
                 Console.WriteLine(m.Message);
+                throw;
+            }
+        }
+
+        static decimal GetQuotient(int product)
+        {
+            try
+            {
+                Console.WriteLine($"Please enter a number to divide {product} by:");
+                string chosenDividend = Console.ReadLine();
+                int parsedDividend = Convert.ToInt32(chosenDividend);
+                decimal quotient = decimal.Divide(product, parsedDividend);
+                return quotient;
+            }
+            catch (DivideByZeroException o)
+            {
+                Console.WriteLine(o.Message);
+                return 0;
                 throw;
             }
         }
